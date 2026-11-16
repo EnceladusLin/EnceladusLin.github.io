@@ -3,19 +3,1351 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>linqinyu.loc.cc</title>
+<title>洞见思途 | Insights</title>
+<meta name="description" content="洞见思途 - 科学思辨，思想引领">
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;900&family=Inter:wght@300;400;500;600&family=La+Belle+Aurore&display=swap" rel="stylesheet">
 <style>
-  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f7f5f0; color: #222; }
-  main { text-align: center; padding: 24px; }
-  h1 { font-size: 28px; margin: 0 0 12px; letter-spacing: 0.5px; }
-  p { font-size: 15px; color: #666; margin: 6px 0; line-height: 1.7; }
+/* ============ Design tokens ============ */
+:root{
+  --bg:#F7F5F0; --bg-soft:#FBF9F6; --panel:#FFFFFF;
+  --ink:#1A1815; --ink-soft:#4A4540; --ink-faint:#8A8478;
+  --line:rgba(26,24,21,.16); --line-soft:rgba(26,24,21,.08);
+  --accent:#E66100; --blue:#0071E3; --gold:#D4AF37; --gold-text:#8F6F1D;
+  --hero-bg:#F7F5F0; --ir-bg:#0B0F16; --ir-ink:#E8ECF2; --ir-soft:#9AA7BA;
+  --nav-bg:rgba(247,245,240,.85);
+  --serif:"Noto Serif SC","Songti SC","SimSun",serif;
+  --sans:"Inter",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  --hand:"La Belle Aurore","Segoe Script",cursive;
+  --nav-h:72px; --maxw:1200px;
+}
+[data-theme="dark"]{
+  --bg:#0A0A0A; --bg-soft:#0F0F0F; --panel:#141414;
+  --ink:#F2EFE9; --ink-soft:#B8B4AC; --ink-faint:#7C776C;
+  --line:rgba(242,239,233,.18); --line-soft:rgba(242,239,233,.08);
+  --gold-text:#D4AF37;
+  --hero-bg:#080808;
+  --nav-bg:rgba(10,10,10,.85);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background-color .4s ease,color .4s ease}
+::selection{background:var(--accent);color:#fff}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;background:none;border:none;color:inherit;cursor:pointer}
+section{scroll-margin-top:calc(var(--nav-h) - 8px);position:relative}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-faint);font-weight:500}
+.sec-head{margin-bottom:44px}
+.sec-head h2{font-family:var(--serif);font-weight:900;font-size:clamp(34px,5.2vw,56px);line-height:1.2;letter-spacing:.01em;margin-top:14px}
+.sec-head .rule{width:56px;height:1px;background:var(--ink);opacity:.55;margin-top:22px}
+p.lead{font-size:17px;line-height:1.95;color:var(--ink-soft);max-width:44em}
+/* entrance animation only when JS is alive: content is visible by default */
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s cubic-bezier(.22,.8,.3,1)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* ============ Nav ============ */
+#nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:100;display:flex;align-items:center;transition:background-color .35s ease,border-color .35s ease;border-bottom:1px solid transparent}
+#nav.scrolled{background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom-color:var(--line-soft)}
+#nav .bar{width:100%;max-width:1600px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-family:var(--serif);font-weight:900;font-size:19px;letter-spacing:.14em;white-space:nowrap}
+.brand small{display:block;font-family:var(--sans);font-weight:500;font-size:9px;letter-spacing:.34em;color:var(--ink-faint)}
+.nav-links{display:flex;gap:34px;list-style:none}
+.nav-links a{font-family:var(--serif);font-size:16px;letter-spacing:.06em;padding:6px 2px;position:relative;transition:color .3s}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--accent);transition:width .3s ease}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a.active{color:var(--accent)}
+.nav-links a.active::after{width:100%}
+.nav-tools{display:flex;align-items:center;gap:10px}
+.lang-switch{display:flex;gap:2px;padding:3px;border:1px solid var(--line-soft);border-radius:999px}
+.lang-switch button{font-size:12px;font-weight:500;padding:4px 10px;border-radius:999px;color:var(--ink-soft);transition:all .25s}
+.lang-switch button.on{background:var(--ink);color:var(--bg)}
+#theme-btn{width:36px;height:36px;display:grid;place-items:center;border-radius:50%;transition:transform .3s}
+#theme-btn:hover{transform:scale(1.12)}
+#theme-btn svg{width:20px;height:20px}
+#theme-btn .ic-sun{display:none}
+[data-theme="dark"] #theme-btn .ic-sun{display:block}
+[data-theme="dark"] #theme-btn .ic-moon{display:none}
+#menu-btn{display:none;width:40px;height:40px;place-items:center}
+#menu-btn svg{width:26px;height:26px}
+#mobile-menu{position:fixed;inset:0;z-index:120;background:var(--nav-bg);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .35s ease}
+#mobile-menu.open{opacity:1;visibility:visible;transform:none}
+#mobile-menu a{font-family:var(--serif);font-size:26px;letter-spacing:.22em;padding:12px;color:var(--ink)}
+#mobile-menu a.active{color:var(--accent)}
+#menu-close{position:absolute;top:16px;right:20px;width:44px;height:44px;display:grid;place-items:center}
+#menu-close svg{width:30px;height:30px}
+
+/* ============ S1 Hero / ink ============ */
+#home{min-height:100svh;display:flex;align-items:center;justify-content:center;background:var(--hero-bg);overflow:hidden}
+#ink-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#ink-fallback{position:absolute;inset:0;width:100%;height:100%;display:none}
+.hero-inner{position:relative;z-index:3;text-align:center;padding:120px 24px 90px;pointer-events:none}
+.hero-inner .eyebrow{color:var(--ink-soft)}
+.hero-title{font-family:var(--serif);font-weight:900;font-size:clamp(64px,13vw,148px);letter-spacing:.06em;line-height:1.08;margin:18px 0 10px;text-shadow:0 0 42px var(--hero-bg)}
+.hero-sub{font-size:clamp(15px,2.4vw,21px);letter-spacing:.28em;color:var(--ink-soft);font-weight:300}
+.hero-pos{margin-top:30px;font-family:var(--serif);font-size:clamp(15px,2vw,18px);letter-spacing:.06em;line-height:1.9;color:var(--ink-soft);max-width:34em;margin-left:auto;margin-right:auto}
+.hero-hint{margin-top:34px;font-size:12px;letter-spacing:.24em;color:var(--ink-faint)}
+.hero-scroll{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);z-index:3;font-size:11px;letter-spacing:.4em;color:var(--ink-faint);text-transform:uppercase;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+.ink-tools{position:absolute;left:24px;bottom:24px;z-index:4;display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--line-soft);border-radius:999px;background:color-mix(in srgb,var(--hero-bg) 72%,transparent);backdrop-filter:blur(8px)}
+.ink-tools .lbl{font-size:11px;letter-spacing:.18em;color:var(--ink-soft);margin-right:2px}
+.ink-dot{width:20px;height:20px;border-radius:50%;border:2px solid transparent;transition:transform .25s,border-color .25s;position:relative}
+.ink-dot:hover{transform:scale(1.2)}
+.ink-dot.on{border-color:var(--ink)}
+.ink-dot.auto{background:conic-gradient(#9B2335,#C9A227,#2E8B74,#2B4C9B,#6C4AB0,#9B2335)}
+.ink-tools .sep{width:1px;height:18px;background:var(--line)}
+#ink-clear{font-size:11px;letter-spacing:.14em;color:var(--ink-soft);padding:2px 4px}
+#ink-clear:hover{color:var(--accent)}
+
+/* ============ Overview: three perspectives ============ */
+#perspectives{padding:110px 0 30px;background:var(--bg)}
+.ov-list{margin-top:46px;border-bottom:1px solid var(--line-soft)}
+.ov-row{display:grid;grid-template-columns:70px 1fr auto;gap:22px;align-items:baseline;padding:30px 8px;border-top:1px solid var(--line-soft);transition:padding-left .35s ease,background-color .35s ease}
+.ov-row:hover{padding-left:20px}
+.ov-row .ov-idx{font-size:12px;letter-spacing:.26em;color:var(--ink-faint)}
+.ov-row .ov-name{font-family:var(--serif);font-weight:900;font-size:clamp(24px,3.6vw,36px);line-height:1.25}
+.ov-row .ov-desc{grid-column:2;font-size:15.5px;color:var(--ink-soft);margin-top:6px}
+.ov-row .ov-arrow{font-size:20px;color:var(--ink-faint);transition:transform .35s ease,color .35s ease}
+.ov-row:hover .ov-arrow{transform:translateX(6px);color:var(--accent)}
+.ov-row[data-to="science"]:hover .ov-name{color:var(--blue)}
+.ov-row[data-to="melancholy"]:hover .ov-name{color:var(--gold-text)}
+.ov-row[data-to="world"]:hover .ov-name{color:var(--blue)}
+
+/* ============ S2 About ============ */
+#about{background:var(--bg-soft);overflow:hidden;padding:130px 0 110px}
+#topo-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#about .wrap{position:relative;z-index:2}
+.about-hero{margin-bottom:74px}
+.about-line{font-family:var(--serif);line-height:1.3;margin-top:20px}
+.about-line .l1{font-size:clamp(24px,3.4vw,38px);font-weight:400;color:var(--ink-soft)}
+.about-line .l2{font-size:clamp(38px,5.6vw,62px);font-weight:900}
+.about-line .l3{font-size:clamp(38px,5.6vw,62px);font-weight:400;font-style:italic;color:var(--ink-soft)}
+.about-sign{display:flex;align-items:center;gap:18px;margin-top:26px}
+.about-sign .dash{width:64px;height:1px;background:var(--ink-soft)}
+.about-sign .sig{font-family:var(--hand);font-size:30px}
+.about-sign a{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--line);padding-bottom:2px;transition:color .3s,border-color .3s}
+.about-sign a:hover{color:var(--accent);border-color:var(--accent)}
+.about-grid{display:grid;grid-template-columns:280px 1fr;gap:64px;align-items:start}
+.portrait{aspect-ratio:3/4;border:1px solid var(--line);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:
+  linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
+  background-size:22px 22px;background-color:var(--bg)}
+.portrait .p-char{font-family:var(--serif);font-weight:900;font-size:110px;line-height:1;color:var(--ink);opacity:.88}
+.portrait .p-name{font-family:var(--hand);font-size:24px;color:var(--ink-soft)}
+.portrait .p-cap{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.3em;color:var(--ink-faint);text-transform:uppercase}
+.about-text h3{font-family:var(--serif);font-size:clamp(26px,3.4vw,36px);font-weight:600;line-height:1.45;margin-bottom:30px}
+.about-text h3 span{font-family:var(--hand);font-weight:400;font-size:.82em;color:var(--ink-soft)}
+.about-text p{font-size:16.5px;line-height:2;color:var(--ink-soft);margin-bottom:26px;max-width:40em}
+.about-text blockquote{border-left:2px solid var(--gold);padding:4px 0 4px 20px;margin:34px 0;font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.9;color:var(--ink)}
+
+/* ============ S3 Science / wheel ============ */
+#science{padding:130px 0 120px;background:var(--bg)}
+#science .sec-head h2 span{color:var(--blue)}
+.wheel-layout{display:grid;grid-template-columns:400px 1fr;gap:72px;align-items:center}
+.wheel-stage{position:relative;width:min(420px,100%);aspect-ratio:1;margin:0 auto}
+.wheel-ring{position:absolute;inset:0;border:1px solid var(--line);border-radius:50%;transition:transform 1s cubic-bezier(.3,.9,.25,1)}
+.wheel-ring::before{content:"";position:absolute;inset:13%;border:1px dashed var(--line-soft);border-radius:50%}
+.wheel-node{position:absolute;top:50%;left:50%;width:104px;height:104px;margin:-52px 0 0 -52px;border-radius:50%;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--serif);font-size:16.5px;font-weight:600;line-height:1.4;padding:10px;transition:border-color .3s,color .3s,box-shadow .3s;z-index:2}
+.wheel-node:hover{border-color:var(--blue)}
+.wheel-node.on{border-color:var(--blue);color:var(--blue);box-shadow:0 10px 34px rgba(0,113,227,.16)}
+.wheel-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.wheel-core .wc-en{font-size:10px;letter-spacing:.34em;color:var(--ink-faint);text-transform:uppercase}
+.wheel-core .wc-cn{font-family:var(--serif);font-weight:900;font-size:27px;margin-top:6px}
+.wheel-panel{border-left:2px solid var(--blue);padding:6px 0 6px 30px;min-height:170px}
+.wheel-panel h3{font-family:var(--serif);font-size:26px;font-weight:600;margin-bottom:14px}
+.wheel-panel p{font-size:16px;line-height:1.95;color:var(--ink-soft);max-width:36em}
+.wheel-panel .wp-tag{display:inline-block;margin-top:18px;font-size:11px;letter-spacing:.22em;color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 40%,transparent);padding:5px 12px;border-radius:999px}
+
+/* ============ S4 Melancholy ============ */
+#melancholy{padding:140px 0 130px;background:var(--bg-soft);overflow:hidden}
+#fluid-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.46;pointer-events:none}
+[data-theme="dark"] #fluid-canvas{opacity:.4}
+#melancholy .wrap{position:relative;z-index:2}
+.mel-layout{display:grid;grid-template-columns:5fr 7fr;gap:70px}
+.mel-left{position:sticky;top:calc(var(--nav-h) + 30px);align-self:start}
+.mel-left h2{font-family:var(--serif);font-weight:900;font-size:clamp(44px,6vw,76px);line-height:1.16}
+.mel-left h2 i{font-style:normal;color:var(--gold)}
+.mel-quote{margin-top:36px;font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.8;color:var(--ink-soft)}
+.mel-right p.lead{margin-bottom:40px}
+.cat-title{font-size:11px;letter-spacing:.3em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:8px}
+.cat-list{list-style:none}
+.cat-list li{font-family:var(--serif);font-size:clamp(21px,2.6vw,27px);font-weight:600;padding:6px 6px;border-bottom:1px solid var(--line-soft)}
+.cat-list li:first-child{border-top:1px solid var(--line-soft)}
+.cat-row{display:flex;justify-content:space-between;align-items:baseline;width:100%;text-align:left;font:inherit;color:inherit;padding:13px 0;cursor:pointer;transition:padding-left .3s,color .3s}
+.cat-row:hover{padding-left:14px;color:var(--gold-text)}
+.cat-row .idx{font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:var(--ink-faint)}
+.cat-row .plus{font-family:var(--sans);font-weight:300;font-size:20px;color:var(--ink-faint);margin-left:14px;transition:transform .35s ease}
+.cat-list li.open .cat-row{color:var(--gold-text)}
+.cat-list li.open .plus{transform:rotate(45deg)}
+.cat-desc{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.22,.8,.3,1)}
+.cat-desc p{font-family:var(--sans);font-weight:300;font-size:15.5px;line-height:1.9;color:var(--ink-soft);padding:2px 0 18px;max-width:38em}
+.cat-list li.gold .cat-row{font-style:italic;color:var(--gold-text)}
+
+/* ============ S5 IR ============ */
+#world{background:var(--ir-bg);color:var(--ir-ink);padding:140px 0 130px;overflow:hidden}
+#world .eyebrow{color:#5F718C}
+#world .sec-head h2{color:var(--ir-ink)}
+#world .sec-head h2 i{font-style:normal;color:var(--gold)}
+#world .sec-head .rule{background:var(--ir-ink)}
+.ir-layout{display:grid;grid-template-columns:7fr 5fr;gap:64px;align-items:center}
+#globe-canvas{width:100%;max-width:520px;aspect-ratio:1;display:block;margin:0 auto;cursor:grab;touch-action:pan-y}
+#globe-canvas:active{cursor:grabbing}
+.ir-quote{font-family:var(--serif);font-style:italic;font-size:18.5px;line-height:1.9;color:#C7D0DE;border-left:2px solid var(--gold);padding-left:20px;margin:36px 0 42px}
+#world p.lead{color:var(--ir-soft)}
+.topic-list{list-style:none;display:flex;flex-wrap:wrap;gap:10px}
+.topic-list li{font-family:var(--serif);font-size:15.5px;padding:8px 18px;border:1px solid rgba(232,236,242,.22);border-radius:999px;transition:border-color .3s,color .3s}
+.topic-list li:hover{border-color:var(--gold);color:var(--gold)}
+.topic-list li.gold{font-style:italic;color:var(--gold);border-color:rgba(212,175,55,.45)}
+
+/* ============ S6 Footer ============ */
+footer{padding:90px 0 46px;background:var(--bg);border-top:1px solid var(--line-soft)}
+.foot-brand{font-family:var(--serif);font-weight:900;font-size:clamp(40px,7vw,72px);letter-spacing:.08em;line-height:1.15}
+.foot-row{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:flex-end;margin-top:44px;padding-top:26px;border-top:1px solid var(--line-soft);font-size:12px;letter-spacing:.16em;color:var(--ink-faint)}
+.foot-row a{transition:color .3s}
+.foot-row a:hover{color:var(--accent)}
+.foot-mail{font-size:13px;letter-spacing:.1em}
+
+/* ============ Responsive ============ */
+@media (max-width:1020px){
+  .about-grid{grid-template-columns:1fr;gap:44px}
+  .portrait{max-width:300px}
+  .wheel-layout{grid-template-columns:1fr;gap:48px}
+  .mel-layout{grid-template-columns:1fr;gap:44px}
+  .mel-left{position:static}
+  .ir-layout{grid-template-columns:1fr;gap:48px}
+}
+@media (max-width:860px){
+  .nav-links{display:none}
+  #menu-btn{display:grid}
+  .brand small{display:none}
+  #fluid-canvas{opacity:.36}
+}
+@media (max-width:480px){
+  :root{--nav-h:62px}
+  #nav .bar{padding:0 12px;gap:8px}
+  .brand{font-size:15.5px;letter-spacing:.08em}
+  .nav-tools{gap:6px}
+  .lang-switch button{padding:4px 7px;font-size:11px}
+  #theme-btn{width:32px;height:32px}
+  #menu-btn{width:34px;height:34px}
+  .ink-tools{left:12px;bottom:14px;padding:7px 9px}
+  .ink-tools .lbl{display:none}
+  .hero-scroll{bottom:86px}
+  section{padding-left:0;padding-right:0}
+  #about,#science,#melancholy,#world{padding-top:96px;padding-bottom:88px}
+  .cat-list li{font-size:20px}
+  .wheel-node{width:86px;height:86px;margin:-43px 0 0 -43px;font-size:14.5px;padding:8px}
+  .wheel-core .wc-cn{font-size:21px}
+  .wheel-panel{padding-left:20px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hero-scroll{animation:none}
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .wheel-ring{transition:none}
+}
 </style>
 </head>
 <body>
+
+<!-- ================= Nav ================= -->
+<header id="nav">
+  <div class="bar">
+    <a class="brand" href="#home"><span data-i18n="brand">洞见思途</span><small>INSIGHTS</small></a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="#home" data-nav="home" data-i18n="nav_home">首页</a></li>
+        <li><a href="#science" data-nav="science" data-i18n="nav_science">科普杂谈</a></li>
+        <li><a href="#melancholy" data-nav="melancholy" data-i18n="nav_melancholy">忧郁的人类</a></li>
+        <li><a href="#world" data-nav="world" data-i18n="nav_world">国际问题</a></li>
+        <li><a href="#about" data-nav="about" data-i18n="nav_about">关于我</a></li>
+      </ul>
+    </nav>
+    <div class="nav-tools">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="zh-CN">简中</button>
+        <button type="button" data-lang="zh-TW">繁中</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <button type="button" id="theme-btn" aria-label="Toggle dark mode">
+        <svg class="ic-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="ic-sun" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+      <button type="button" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-menu" aria-hidden="true">
+  <button type="button" id="menu-close" aria-label="Close menu">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+  </button>
+  <a href="#home" data-nav="home" data-i18n="nav_home">首页</a>
+  <a href="#science" data-nav="science" data-i18n="nav_science">科普杂谈</a>
+  <a href="#melancholy" data-nav="melancholy" data-i18n="nav_melancholy">忧郁的人类</a>
+  <a href="#world" data-nav="world" data-i18n="nav_world">国际问题</a>
+  <a href="#about" data-nav="about" data-i18n="nav_about">关于我</a>
+</div>
+
 <main>
-  <h1>linqinyu.loc.cc</h1>
-  <p>林钦玉的个人站点，还在建设中。</p>
-  <p>GitHub：<a href="https://github.com/EnceladusLin">EnceladusLin</a></p>
+<!-- ================= S1 Hero ================= -->
+<section id="home">
+  <canvas id="ink-canvas"></canvas>
+  <canvas id="ink-fallback"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">INSIGHTS · 文書说</div>
+    <h1 class="hero-title" data-i18n="brand">洞见思途</h1>
+    <div class="hero-sub">where science meets philosophy</div>
+    <p class="hero-pos" data-i18n="hero_pos">我尝试从科学、人文与国际关系的不同尺度，理解这个复杂的世界。</p>
+    <div class="hero-hint" data-i18n="hero_hint">移动鼠标 · 搅动墨色</div>
+  </div>
+  <div class="hero-scroll">Explore</div>
+  <div class="ink-tools" id="ink-tools">
+    <span class="lbl" data-i18n="ink_label">墨色</span>
+    <button type="button" class="ink-dot auto on" data-ink="auto" aria-label="Mixed colors"></button>
+    <button type="button" class="ink-dot" data-ink="0" style="background:#9B2335" aria-label="Rouge"></button>
+    <button type="button" class="ink-dot" data-ink="1" style="background:#2B4C9B" aria-label="Ultramarine"></button>
+    <button type="button" class="ink-dot" data-ink="2" style="background:#2E8B74" aria-label="Turquoise"></button>
+    <button type="button" class="ink-dot" data-ink="3" style="background:#C9A227" aria-label="Gold"></button>
+    <button type="button" class="ink-dot" data-ink="4" style="background:#6C4AB0" aria-label="Violet"></button>
+    <span class="sep"></span>
+    <button type="button" id="ink-clear" data-i18n="ink_clear">洗笔</button>
+  </div>
+</section>
+
+<!-- ================= Overview: three perspectives ================= -->
+<section id="perspectives">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:0">
+      <div class="eyebrow"><span data-i18n="ov_eye">三个观察方向</span> · THREE PERSPECTIVES</div>
+    </div>
+    <div class="ov-list reveal">
+      <a class="ov-row" data-to="science" href="#science">
+        <span class="ov-idx">01</span>
+        <span class="ov-name" data-i18n="ov1n">科普杂谈</span>
+        <span class="ov-arrow">→</span>
+        <span class="ov-desc" data-i18n="ov1d">科学，代表我理解世界的方式。</span>
+      </a>
+      <a class="ov-row" data-to="melancholy" href="#melancholy">
+        <span class="ov-idx">02</span>
+        <span class="ov-name" data-i18n="ov2n">忧郁的人类</span>
+        <span class="ov-arrow">→</span>
+        <span class="ov-desc" data-i18n="ov2d">人文，代表我理解人类的方式。</span>
+      </a>
+      <a class="ov-row" data-to="world" href="#world">
+        <span class="ov-idx">03</span>
+        <span class="ov-name" data-i18n="ov3n">国际问题看法</span>
+        <span class="ov-arrow">→</span>
+        <span class="ov-desc" data-i18n="ov3d">国际关系，代表我观察现实的方式。</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= S3 Science ================= -->
+<section id="science">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Explore Topics</div>
+      <h2><span data-i18n="sci_title">世界的多面</span></h2>
+      <div class="rule"></div>
+    </div>
+    <p class="lead reveal" data-i18n="sci_intro">从科技进步到金融心理学，从逻辑学到自由意志——以不同的切片，观察这个复杂的世界。</p>
+    <div class="wheel-layout" style="margin-top:56px">
+      <div class="wheel-stage reveal">
+        <div class="wheel-ring" id="wheel-ring">
+          <button type="button" class="wheel-node" data-topic="0" data-i18n="w1">宇宙与物理</button>
+          <button type="button" class="wheel-node" data-topic="1" data-i18n="w2">科学方法</button>
+          <button type="button" class="wheel-node" data-topic="2" data-i18n="w3">技术与未来</button>
+        </div>
+        <div class="wheel-core">
+          <div class="wc-en">Explore</div>
+          <div class="wc-cn" id="wheel-core-name">科学方法</div>
+        </div>
+      </div>
+      <div class="wheel-panel reveal">
+        <h3 id="wheel-panel-title">科学方法</h3>
+        <p id="wheel-panel-desc">科学思辨，思想引领。不轻信结论，先追问证据与逻辑——从逻辑学到自由意志，练习对世界提问的方式。</p>
+        <span class="wp-tag" id="wheel-panel-tag">METHOD · 方法</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= S4 Melancholy ================= -->
+<section id="melancholy">
+  <canvas id="fluid-canvas"></canvas>
+  <div class="wrap">
+    <div class="mel-layout">
+      <div class="mel-left reveal">
+        <div class="eyebrow"><span data-i18n="mel_eye">深度思辨</span> · MELANCHOLY</div>
+        <h2 style="margin-top:16px"><span data-i18n="mel_t1">忧郁的</span><br><span data-i18n="mel_t2">人类</span><i>.</i></h2>
+        <div class="mel-quote" data-i18n="mel_quote">"我们已经成了我们工具的工具。"</div>
+      </div>
+      <div class="mel-right reveal">
+        <p class="lead" data-i18n="mel_intro">关于人类情感、社会与存在的深思熟虑。探讨心理健康危机、新自由主义冲击与生物还原论，我们在群星中寻找意义，却在内心的深渊里挣扎。</p>
+        <div class="cat-title" data-i18n="cat_title">探索分类</div>
+        <ul class="cat-list">
+          <li><button type="button" class="cat-row" aria-expanded="false"><span data-i18n="cat1">深度理论</span><span><span class="idx">01</span><span class="plus">+</span></span></button><div class="cat-desc"><p data-i18n="cat1d">关于心灵的理论之争：当心理健康被还原为大脑的化学，生物还原论解释了什么，又遮蔽了什么。</p></div></li>
+          <li><button type="button" class="cat-row" aria-expanded="false"><span data-i18n="cat2">社会观察</span><span><span class="idx">02</span><span class="plus">+</span></span></button><div class="cat-desc"><p data-i18n="cat2d">技术与制度如何重塑日常生活：新自由主义的冲击之下，普通人怎样安放自己的时间与意义。</p></div></li>
+          <li><button type="button" class="cat-row" aria-expanded="false"><span data-i18n="cat3">投资哲学</span><span><span class="idx">03</span><span class="plus">+</span></span></button><div class="cat-desc"><p data-i18n="cat3d">价格、周期与人性：投资最终检验的，是一个人对价值与时间的判断。</p></div></li>
+          <li><button type="button" class="cat-row" aria-expanded="false"><span data-i18n="cat4">人生哲学</span><span><span class="idx">04</span><span class="plus">+</span></span></button><div class="cat-desc"><p data-i18n="cat4d">在群星中寻找意义，在深渊里练习自处：关于存在、选择与有限性的思考。</p></div></li>
+          <li class="gold"><button type="button" class="cat-row" aria-expanded="false"><span data-i18n="cat5">历史批判</span><span><span class="idx">05</span><span class="plus">+</span></span></button><div class="cat-desc"><p data-i18n="cat5d">回望来路，是为了看清脚下：对历史叙事保持追问，不把任何结论当作终点。</p></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= S5 World / IR ================= -->
+<section id="world">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow"><span data-i18n="ir_eye">全球视野</span> · GLOBAL VISION</div>
+      <h2><span data-i18n="ir_t1">国际问题</span><span data-i18n="ir_t2">看法</span><i>.</i></h2>
+      <div class="rule"></div>
+    </div>
+    <div class="ir-layout">
+      <div class="reveal"><canvas id="globe-canvas" width="520" height="520"></canvas></div>
+      <div class="reveal">
+        <p class="lead" data-i18n="ir_intro">关于国际关系、地缘政治与全球趋势的深度分析。从历史脉络到现实挑战，以冷静客观的态度观察当今世界的复杂局势，探寻人类共同发展的可能路径。</p>
+        <div class="ir-quote" data-i18n="ir_quote">"国际关系不是零和博弈，而是在复杂互动中寻求人类共同福祉的学科。"</div>
+        <div class="cat-title" style="color:#5F718C" data-i18n="ir_topics_title">研究议题</div>
+        <ul class="topic-list" style="margin-top:14px">
+          <li data-i18n="ir_tpc1">大国博弈</li>
+          <li data-i18n="ir_tpc2">地缘政治</li>
+          <li data-i18n="ir_tpc3">全球化趋势</li>
+          <li data-i18n="ir_tpc4">科技与安全</li>
+          <li class="gold" data-i18n="ir_tpc5">文明对话</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ================= S2 About ================= -->
+<section id="about">
+  <canvas id="topo-canvas"></canvas>
+  <div class="wrap">
+    <div class="about-hero reveal">
+      <div class="eyebrow">The Story of Enceladus</div>
+      <div class="about-line">
+        <span class="l1" data-i18n="about_l1">为人间</span>
+        <span class="l2" data-i18n="about_l2">留下一点</span>
+        <span class="l3" data-i18n="about_l3">属于自己的痕迹</span>
+      </div>
+      <div class="about-sign">
+        <span class="dash"></span>
+        <span class="sig">Enceladus</span>
+        <a href="mailto:linqinyv@outlook.com">Email</a>
+      </div>
+    </div>
+    <div class="about-grid">
+      <div class="portrait reveal" aria-label="Portrait placeholder">
+        <div class="p-char">林</div>
+        <div class="p-name">Enceladus</div>
+        <div class="p-cap">Lin Qinyu</div>
+      </div>
+      <div class="about-text reveal">
+        <h3><span data-i18n="about_hello">你好，我是林钦玉</span><br><span>Enceladus</span></h3>
+        <p data-i18n="about_p1">高中的时候我便萌生制作这个网站的想法，直到大二这一年才正式落实到位。我总想着，能在分享观点与思维的过程中，为自己在这个世界的长河里，留下一点属于自己的痕迹。</p>
+        <p data-i18n="about_p2">时常会觉时光仓促，也屡屡向母亲喟叹，怕自己终其一生不过是庸碌之辈，难成栋梁。母亲的一句反问，或许是她二十载岁月里，予我最清醒的箴言。</p>
+        <blockquote>
+          <span data-i18n="about_q1">“想想你叔20岁时在做什么？”</span><br><br>
+          <span data-i18n="about_q2">“他在西北荒漠挑粪，喂狗”</span>
+        </blockquote>
+        <p data-i18n="about_p4">浩瀚星海，藏着宇宙万千未解的奥秘，那份源自苍穹的感召，引着我一头扎进天文与物理的深邃领域，甘之如饴。</p>
+        <p data-i18n="about_p5">您若感兴趣，不妨关注我的微信公众号，或是加我微信一同交流。这里欢迎所有不同的声音，我也会邀请各专业前沿领域的专家学者前来做客，和大家一起撰稿研讨。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
+
+<!-- ================= S6 Footer ================= -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-brand" data-i18n="brand">洞见思途</div>
+    <div class="foot-row">
+      <span>© 2025 文書说 INSIGHTS</span>
+      <span data-i18n="foot_note">洞见思途 · 林钦玉（Enceladus）的个人网站</span>
+      <a class="foot-mail" href="mailto:linqinyv@outlook.com">linqinyv@outlook.com</a>
+      <a href="#home" id="to-top"><span data-i18n="back_top">返回顶部</span> ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ================= Theme (single source of truth) ================= */
+(function(){
+  var saved = null;
+  try{ saved = localStorage.getItem('theme-preference'); }catch(e){}
+  var dark = saved ? saved === 'dark' : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  if(dark) document.documentElement.setAttribute('data-theme','dark');
+  document.getElementById('theme-btn').addEventListener('click', function(){
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if(isDark){ document.documentElement.removeAttribute('data-theme'); }
+    else{ document.documentElement.setAttribute('data-theme','dark'); }
+    try{ localStorage.setItem('theme-preference', isDark ? 'light' : 'dark'); }catch(e){}
+    window.dispatchEvent(new CustomEvent('themeChanged'));
+  });
+})();
+
+/* ================= i18n ================= */
+var I18N = {
+'zh-CN':{
+  brand:'洞见思途', nav_home:'首页', nav_about:'关于我', nav_science:'科普杂谈', nav_melancholy:'忧郁的人类', nav_world:'国际问题',
+  hero_hint:'移动鼠标 · 搅动墨色', ink_label:'墨色', ink_clear:'洗笔',
+  hero_pos:'我尝试从科学、人文与国际关系的不同尺度，理解这个复杂的世界。',
+  ov_eye:'三个观察方向', ov1n:'科普杂谈', ov1d:'科学，代表我理解世界的方式。', ov2n:'忧郁的人类', ov2d:'人文，代表我理解人类的方式。', ov3n:'国际问题看法', ov3d:'国际关系，代表我观察现实的方式。',
+  foot_note:'洞见思途 · 林钦玉（Enceladus）的个人网站',
+  about_l1:'为人间', about_l2:'留下一点', about_l3:'属于自己的痕迹', about_hello:'你好，我是林钦玉',
+  about_p1:'高中的时候我便萌生制作这个网站的想法，直到大二这一年才正式落实到位。我总想着，能在分享观点与思维的过程中，为自己在这个世界的长河里，留下一点属于自己的痕迹。',
+  about_p2:'时常会觉时光仓促，也屡屡向母亲喟叹，怕自己终其一生不过是庸碌之辈，难成栋梁。母亲的一句反问，或许是她二十载岁月里，予我最清醒的箴言。',
+  about_q1:'“想想你叔20岁时在做什么？”', about_q2:'“他在西北荒漠挑粪，喂狗”',
+  about_p4:'浩瀚星海，藏着宇宙万千未解的奥秘，那份源自苍穹的感召，引着我一头扎进天文与物理的深邃领域，甘之如饴。',
+  about_p5:'您若感兴趣，不妨关注我的微信公众号，或是加我微信一同交流。这里欢迎所有不同的声音，我也会邀请各专业前沿领域的专家学者前来做客，和大家一起撰稿研讨。',
+  sci_title:'世界的多面',
+  sci_intro:'从科技进步到金融心理学，从逻辑学到自由意志——以不同的切片，观察这个复杂的世界。',
+  w1:'宇宙与物理', w2:'科学方法', w3:'技术与未来',
+  w1d:'浩瀚星海，藏着宇宙万千未解的奥秘。那份源自苍穹的感召，引着我走进天文与物理——这里是我一切好奇的起点。', w1t:'COSMOS · 物理',
+  w2d:'科学思辨，思想引领。不轻信结论，先追问证据与逻辑——从逻辑学到自由意志，练习对世界提问的方式。', w2t:'METHOD · 方法',
+  w3d:'技术正在重写社会运行的规则。观察它、理解它，也警惕工具对人的反噬。', w3t:'TECH · 未来',
+  mel_eye:'深度思辨', mel_t1:'忧郁的', mel_t2:'人类', mel_quote:'"我们已经成了我们工具的工具。"',
+  mel_intro:'关于人类情感、社会与存在的深思熟虑。探讨心理健康危机、新自由主义冲击与生物还原论，我们在群星中寻找意义，却在内心的深渊里挣扎。',
+  cat_title:'探索分类', cat1:'深度理论', cat2:'社会观察', cat3:'投资哲学', cat4:'人生哲学', cat5:'历史批判',
+  cat1d:'关于心灵的理论之争：当心理健康被还原为大脑的化学，生物还原论解释了什么，又遮蔽了什么。',
+  cat2d:'技术与制度如何重塑日常生活：新自由主义的冲击之下，普通人怎样安放自己的时间与意义。',
+  cat3d:'价格、周期与人性：投资最终检验的，是一个人对价值与时间的判断。',
+  cat4d:'在群星中寻找意义，在深渊里练习自处：关于存在、选择与有限性的思考。',
+  cat5d:'回望来路，是为了看清脚下：对历史叙事保持追问，不把任何结论当作终点。',
+  ir_eye:'全球视野', ir_t1:'国际问题', ir_t2:'看法',
+  ir_intro:'关于国际关系、地缘政治与全球趋势的深度分析。从历史脉络到现实挑战，以冷静客观的态度观察当今世界的复杂局势，探寻人类共同发展的可能路径。',
+  ir_quote:'"国际关系不是零和博弈，而是在复杂互动中寻求人类共同福祉的学科。"',
+  ir_topics_title:'研究议题', ir_tpc1:'大国博弈', ir_tpc2:'地缘政治', ir_tpc3:'全球化趋势', ir_tpc4:'科技与安全', ir_tpc5:'文明对话',
+  back_top:'返回顶部'
+},
+'zh-TW':{
+  brand:'洞見思途', nav_home:'首頁', nav_about:'關於我', nav_science:'科普雜談', nav_melancholy:'憂鬱的人類', nav_world:'國際問題',
+  hero_hint:'移動滑鼠 · 攪動墨色', ink_label:'墨色', ink_clear:'洗筆',
+  hero_pos:'我嘗試從科學、人文與國際關係的不同尺度，理解這個複雜的世界。',
+  ov_eye:'三個觀察方向', ov1n:'科普雜談', ov1d:'科學，代表我理解世界的方式。', ov2n:'憂鬱的人類', ov2d:'人文，代表我理解人類的方式。', ov3n:'國際問題看法', ov3d:'國際關係，代表我觀察現實的方式。',
+  foot_note:'洞見思途 · 林欽玉（Enceladus）的個人網站',
+  about_l1:'為人間', about_l2:'留下一點', about_l3:'屬於自己的痕跡', about_hello:'你好，我是林欽玉',
+  about_p1:'高中的時候我便萌生製作這個網站的想法，直到大二這一年才正式落實到位。我總想著，能在分享觀點與思維的過程中，為自己在這個世界的長河裡，留下一點屬於自己的痕跡。',
+  about_p2:'時常會覺時光倉促，也屢屢向母親喟嘆，怕自己終其一生不過是庸碌之輩，難成棟梁。母親的一句反問，或許是她二十載歲月裡，予我最清醒的箴言。',
+  about_q1:'「想想你叔20歲時在做什麼？」', about_q2:'「他在西北荒漠挑糞，餵狗」',
+  about_p4:'浩瀚星海，藏著宇宙萬千未解的奧秘，那份源自蒼穹的感召，引著我一頭扎進天文與物理的深邃領域，甘之如飴。',
+  about_p5:'您若感興趣，不妨關注我的微信公眾號，或是加我微信一同交流。這裡歡迎所有不同的聲音，我也會邀請各專業前沿領域的專家學者前來做客，和大家一起撰稿研討。',
+  sci_title:'世界的多面',
+  sci_intro:'從科技進步到金融心理學，從邏輯學到自由意志——以不同的切片，觀察這個複雜的世界。',
+  w1:'宇宙與物理', w2:'科學方法', w3:'技術與未來',
+  w1d:'浩瀚星海，藏著宇宙萬千未解的奧秘。那份源自蒼穹的感召，引著我走進天文與物理——這裡是我一切好奇的起點。', w1t:'COSMOS · 物理',
+  w2d:'科學思辨，思想引領。不輕信結論，先追問證據與邏輯——從邏輯學到自由意志，練習對世界提問的方式。', w2t:'METHOD · 方法',
+  w3d:'技術正在重寫社會運行的規則。觀察它、理解它，也警惕工具對人的反噬。', w3t:'TECH · 未來',
+  mel_eye:'深度思辨', mel_t1:'憂鬱的', mel_t2:'人類', mel_quote:'"我們已經成了我們工具的工具。"',
+  mel_intro:'關於人類情感、社會與存在的深思熟慮。探討心理健康危機、新自由主義衝擊與生物還原論，我們在群星中尋找意義，卻在內心的深淵裡掙扎。',
+  cat_title:'探索分類', cat1:'深度理論', cat2:'社會觀察', cat3:'投資哲學', cat4:'人生哲學', cat5:'歷史批判',
+  cat1d:'關於心靈的理論之爭：當心理健康被還原為大腦的化學，生物還原論解釋了什麼，又遮蔽了什麼。',
+  cat2d:'技術與制度如何重塑日常生活：新自由主義的衝擊之下，普通人怎樣安放自己的時間與意義。',
+  cat3d:'價格、週期與人性：投資最終檢驗的，是一個人對價值與時間的判斷。',
+  cat4d:'在群星中尋找意義，在深淵裡練習自處：關於存在、選擇與有限性的思考。',
+  cat5d:'回望來路，是為了看清腳下：對歷史敘事保持追問，不把任何結論當作終點。',
+  ir_eye:'全球視野', ir_t1:'國際問題', ir_t2:'看法',
+  ir_intro:'關於國際關係、地緣政治與全球趨勢的深度分析。從歷史脈絡到現實挑戰，以冷靜客觀的態度觀察當今世界的複雜局勢，探尋人類共同發展的可能路徑。',
+  ir_quote:'"國際關係不是零和博弈，而是在複雜互動中尋求人類共同福祉的學科。"',
+  ir_topics_title:'研究議題', ir_tpc1:'大國博弈', ir_tpc2:'地緣政治', ir_tpc3:'全球化趨勢', ir_tpc4:'科技與安全', ir_tpc5:'文明對話',
+  back_top:'返回頂部'
+},
+'en':{
+  brand:'Insights', nav_home:'Home', nav_about:'About', nav_science:'Science', nav_melancholy:'Melancholy', nav_world:'World Affairs',
+  hero_hint:'Move your cursor · stir the ink', ink_label:'Ink', ink_clear:'Rinse',
+  hero_pos:'I try to understand this complex world from the different scales of science, the humanities, and international relations.',
+  ov_eye:'Three Perspectives', ov1n:'Science', ov1d:'Science — how I understand the world.', ov2n:'Melancholy', ov2d:'The humanities — how I understand humankind.', ov3n:'World Affairs', ov3d:'International relations — how I observe reality.',
+  foot_note:'Insights · the personal website of Lin Qinyu (Enceladus)',
+  about_l1:'For this world,', about_l2:'leave a small', about_l3:'trace of my own', about_hello:"Hello, I'm Lin Qinyu",
+  about_p1:'The idea of building this website first came to me in high school, but it only became real in my second year of university. I have always hoped that, by sharing views and ways of thinking, I might leave a small trace of my own in the long river of this world.',
+  about_p2:'I often feel how hurried time is, and I have sighed to my mother more than once, fearing I might spend my whole life as a mediocrity, never becoming a pillar of anything. Her reply may be the clearest maxim her twenty years have given me.',
+  about_q1:'"Think about what your uncle was doing at twenty."', about_q2:'"He was hauling manure and feeding dogs in the northwestern desert."',
+  about_p4:'The vast sea of stars hides countless unsolved mysteries of the universe. Drawn by that summons from the firmament, I plunged headlong into the depths of astronomy and physics — and relished every moment of it.',
+  about_p5:'If any of this interests you, you are welcome to follow my WeChat public account, or add me on WeChat to talk. All different voices are welcome here; I also invite experts and scholars at the frontiers of their fields to visit, write and discuss together.',
+  sci_title:'The Many Faces of the World',
+  sci_intro:'From technological progress to financial psychology, from logic to free will — observing this complex world, one slice at a time.',
+  w1:'Cosmos & Physics', w2:'Scientific Method', w3:'Technology & Futures',
+  w1d:'The vast sea of stars hides countless unsolved mysteries of the universe. Drawn by that summons from the firmament, I found my way into astronomy and physics — where all my curiosity begins.', w1t:'COSMOS · PHYSICS',
+  w2d:'Scientific reflection, led by thought. Never accepting a conclusion before asking for its evidence and logic — from logic to free will, practising how to question the world.', w2t:'METHOD · INQUIRY',
+  w3d:'Technology is rewriting the rules by which society runs. Observe it, understand it — and stay wary of the moment our tools turn on their makers.', w3t:'TECH · FUTURES',
+  mel_eye:'Deep Reflection', mel_t1:'The Melancholy', mel_t2:'of Humankind', mel_quote:'"We have become the tools of our tools."',
+  mel_intro:'Deep reflections on human emotion, society and existence. On the mental-health crisis, the shocks of neoliberalism and biological reductionism — we search for meaning among the stars, yet struggle in the abyss within.',
+  cat_title:'Explore', cat1:'Deep Theory', cat2:'Social Observation', cat3:'Investment Philosophy', cat4:'Philosophy of Life', cat5:'Historical Critique',
+  cat1d:'The theoretical quarrel over the mind: when mental health is reduced to brain chemistry, what does biological reductionism explain — and what does it hide?',
+  cat2d:'How technology and institutions reshape everyday life: under the shocks of neoliberalism, how do ordinary people place their time and their meaning?',
+  cat3d:'Price, cycles and human nature: in the end, investing tests one person\u2019s judgement of value and of time.',
+  cat4d:'Searching for meaning among the stars, learning to dwell with oneself in the abyss: on existence, choice and finitude.',
+  cat5d:'Looking back along the road in order to see the ground under our feet: questioning historical narratives, and treating no conclusion as the end.',
+  ir_eye:'Global Vision', ir_t1:'Views on', ir_t2:' World Affairs',
+  ir_intro:'In-depth analysis of international relations, geopolitics and global trends. From historical threads to present challenges, observing the complexity of today\u2019s world with a calm and objective eye, in search of possible paths toward our common development.',
+  ir_quote:'"International relations is not a zero-sum game, but the study of seeking common human welfare through complex interaction."',
+  ir_topics_title:'Research Topics', ir_tpc1:'Great-Power Rivalry', ir_tpc2:'Geopolitics', ir_tpc3:'Globalization Trends', ir_tpc4:'Technology & Security', ir_tpc5:'Dialogue of Civilizations',
+  back_top:'Back to Top'
+}};
+var WHEEL_KEYS = [
+  {name:'w1', desc:'w1d', tag:'w1t'},
+  {name:'w2', desc:'w2d', tag:'w2t'},
+  {name:'w3', desc:'w3d', tag:'w3t'}
+];
+var currentLang = 'zh-CN';
+var currentTopic = 1;
+function applyLang(lang){
+  if(!I18N[lang]) lang = 'zh-CN';
+  currentLang = lang;
+  var dict = I18N[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k = el.getAttribute('data-i18n');
+    if(dict[k] !== undefined) el.textContent = dict[k];
+  });
+  document.querySelectorAll('.lang-switch button').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('data-lang') === lang);
+  });
+  updateWheelPanel();
+  try{ localStorage.setItem('site-lang', lang); }catch(e){}
+}
+function updateWheelPanel(){
+  var dict = I18N[currentLang], t = WHEEL_KEYS[currentTopic];
+  document.getElementById('wheel-core-name').textContent = dict[t.name];
+  document.getElementById('wheel-panel-title').textContent = dict[t.name];
+  document.getElementById('wheel-panel-desc').textContent = dict[t.desc];
+  document.getElementById('wheel-panel-tag').textContent = dict[t.tag];
+  document.querySelectorAll('.wheel-node').forEach(function(n){
+    n.classList.toggle('on', +n.getAttribute('data-topic') === currentTopic);
+  });
+}
+document.querySelectorAll('.lang-switch button').forEach(function(b){
+  b.addEventListener('click', function(){ applyLang(b.getAttribute('data-lang')); });
+});
+(function(){
+  var saved = null;
+  try{ saved = localStorage.getItem('site-lang'); }catch(e){}
+  applyLang(saved || 'zh-CN');
+})();
+</script>
+
+<script>
+/* ================= Nav behavior / scrollspy / mobile menu ================= */
+(function(){
+  var nav = document.getElementById('nav');
+  var menu = document.getElementById('mobile-menu');
+  function onScroll(){ nav.classList.toggle('scrolled', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var menuBtn = document.getElementById('menu-btn');
+  var closeBtn = document.getElementById('menu-close');
+  function openMenu(){ menu.classList.add('open'); menu.setAttribute('aria-hidden','false'); menuBtn.setAttribute('aria-expanded','true'); document.body.style.overflow = 'hidden'; closeBtn.focus(); }
+  function closeMenu(){ if(!menu.classList.contains('open')) return; menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); menuBtn.setAttribute('aria-expanded','false'); document.body.style.overflow = ''; menuBtn.focus(); }
+  menuBtn.addEventListener('click', openMenu);
+  closeBtn.addEventListener('click', closeMenu);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeMenu(); });
+  menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ menu.classList.remove('open'); menu.setAttribute('aria-hidden','true'); menuBtn.setAttribute('aria-expanded','false'); document.body.style.overflow = ''; }); });
+  var spy = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        document.querySelectorAll('[data-nav]').forEach(function(a){
+          a.classList.toggle('active', a.getAttribute('data-nav') === en.target.id);
+        });
+      }
+    });
+  }, {rootMargin:'-38% 0px -55% 0px'});
+  ['home','science','melancholy','world','about'].forEach(function(id){
+    var el = document.getElementById(id); if(el) spy.observe(el);
+  });
+  var rev = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); rev.unobserve(en.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ rev.observe(el); });
+})();
+
+/* ================= Topic wheel ================= */
+(function(){
+  var ring = document.getElementById('wheel-ring');
+  var nodes = Array.prototype.slice.call(ring.querySelectorAll('.wheel-node'));
+  var ANGLES = [0, 120, 240];       /* base position of each node */
+  var TOP = -90;                      /* selected node sits at top */
+  var rotation = 0, tweenId = 0;
+  function layout(){
+    var rect = ring.getBoundingClientRect();
+    var nodeHalf = nodes.length ? nodes[0].offsetWidth / 2 : 52;
+    var R = rect.width / 2 - nodeHalf - 2; /* keep node discs inside the stage box */
+    nodes.forEach(function(n, i){
+      var a = (ANGLES[i] + rotation) * Math.PI / 180;
+      n.style.transform = 'translate(' + (Math.cos(a) * R).toFixed(1) + 'px,' + (Math.sin(a) * R).toFixed(1) + 'px)';
+    });
+    ring.style.transform = 'none';
+  }
+  function select(i, animate){
+    currentTopic = i;
+    var target = TOP - ANGLES[i];
+    tweenId++;                       /* cancel any in-flight tween */
+    if(animate !== false){
+      var myTween = tweenId;
+      var start = rotation, diff = ((target - start + 540) % 360) - 180, t0 = performance.now();
+      function step(t){
+        if(myTween !== tweenId) return;   /* superseded by a newer selection */
+        var k = Math.min(1, (t - t0) / 650), e = 1 - Math.pow(1 - k, 3);
+        rotation = start + diff * e; layout();
+        if(k < 1) requestAnimationFrame(step); else rotation = target;
+      }
+      requestAnimationFrame(step);
+    } else { rotation = target; layout(); }
+    updateWheelPanel();
+  }
+  nodes.forEach(function(n){
+    n.addEventListener('click', function(){ select(+n.getAttribute('data-topic')); });
+  });
+  window.addEventListener('resize', layout);
+  select(1, false);
+})();
+
+/* ================= Melancholy accordion ================= */
+(function(){
+  document.querySelectorAll('.cat-list li').forEach(function(li){
+    var btn = li.querySelector('.cat-row'), desc = li.querySelector('.cat-desc');
+    if(!btn || !desc) return;
+    btn.addEventListener('click', function(){
+      var willOpen = !li.classList.contains('open');
+      document.querySelectorAll('.cat-list li.open').forEach(function(o){
+        o.classList.remove('open');
+        o.querySelector('.cat-desc').style.maxHeight = '0px';
+        o.querySelector('.cat-row').setAttribute('aria-expanded', 'false');
+      });
+      if(willOpen){
+        li.classList.add('open');
+        desc.style.maxHeight = desc.scrollHeight + 'px';
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+})();
+
+/* ================= Helpers ================= */
+var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function sectionVisible(el){
+  var r = el.getBoundingClientRect();
+  return r.bottom > 0 && r.top < window.innerHeight;
+}
+
+/* ================= Topography (About) — rebuilt from original parameters ================= */
+(function(){
+  var canvas = document.getElementById('topo-canvas');
+  var section = document.getElementById('about');
+  var ctx = canvas.getContext('2d');
+  var W = 0, H = 0, lines = [], time = 0, running = false;
+  var mouse = {x:-9999, y:-9999};
+  var GAP = 30, STEP = 10;
+  function resize(){
+    var r = section.getBoundingClientRect();
+    W = canvas.width = Math.floor(r.width); H = canvas.height = Math.floor(r.height);
+    lines = [];
+    for(var y = 60; y < H - 40; y += GAP){
+      var pts = [];
+      for(var x = 0; x <= W; x += STEP) pts.push({x:x, originY:y, angle:x * 0.01});
+      lines.push(pts);
+    }
+  }
+  function frame(){
+    if(!running) return;
+    ctx.clearRect(0, 0, W, H);
+    time += 0.01;
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var g = ctx.createLinearGradient(0, 0, W, H);
+    var c = dark ? '245,245,245' : '26,24,21';
+    g.addColorStop(0, 'rgba(' + c + ',0.05)');
+    g.addColorStop(0.5, 'rgba(' + c + ',0.20)');
+    g.addColorStop(1, 'rgba(' + c + ',0.05)');
+    ctx.strokeStyle = g; ctx.lineWidth = 1;
+    var rect = canvas.getBoundingClientRect();
+    var mx = mouse.x, my = mouse.y - rect.top + section.getBoundingClientRect().top - rect.top;
+    /* mouse stored in page coords relative to canvas */
+    var cmx = mouse.x - rect.left, cmy = mouse.y - rect.top;
+    lines.forEach(function(line){
+      ctx.beginPath();
+      line.forEach(function(p, i){
+        var wave = Math.sin(p.angle + time) * 10 + Math.sin(p.angle * 0.5 + time * 0.5) * 5;
+        var dx = p.x - cmx, dy = p.originY - cmy;
+        var dist = Math.sqrt(dx * dx + dy * dy), R = 300, iy = 0;
+        if(dist < R){ var f = (R - dist) / R; iy = (dy > 0 ? 1 : -1) * f * f * 60; }
+        var y = p.originY + wave + iy;
+        if(i === 0) ctx.moveTo(p.x, y); else ctx.lineTo(p.x, y);
+      });
+      ctx.stroke();
+    });
+    requestAnimationFrame(frame);
+  }
+  function start(){ if(!running && !REDUCED){ running = true; requestAnimationFrame(frame); } }
+  function stop(){ running = false; }
+  window.addEventListener('mousemove', function(e){ mouse.x = e.clientX; mouse.y = e.clientY; }, {passive:true});
+  window.addEventListener('resize', resize);
+  resize();
+  if(REDUCED){ running = true; frame(); running = false; /* one static frame */ }
+  new IntersectionObserver(function(en){ en[0].isIntersecting ? start() : stop(); }).observe(section);
+  document.addEventListener('visibilitychange', function(){ document.hidden ? stop() : (sectionVisible(section) && start()); });
+})();
+
+/* ================= Particle globe (IR) — rebuilt, Canvas 2D ================= */
+(function(){
+  var canvas = document.getElementById('globe-canvas');
+  var section = document.getElementById('world');
+  var ctx = canvas.getContext('2d');
+  var pts = [], links = [], rotY = 0.4, rotX = 0.35, velY = 0.0016, dragging = false, lastX = 0, lastY = 0, running = false;
+  /* Land points sampled from Natural Earth country polygons (rasterized equirectangular,
+     Fibonacci-sampled on the sphere, land only). Encoded as int16 lat/lon x100, big-endian, base64. */
+  var LAND_B64 = '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';
+  (function(){
+    var bin = atob(LAND_B64), bytes = new Uint8Array(bin.length);
+    for(var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    var dv = new DataView(bytes.buffer);
+    for(var o = 0; o + 3 < bytes.length; o += 4){
+      var lat = dv.getInt16(o) / 100 * Math.PI / 180, lon = dv.getInt16(o + 2) / 100 * Math.PI / 180;
+      var c = Math.cos(lat);
+      pts.push({x: c * Math.sin(lon), y: Math.sin(lat), z: c * Math.cos(lon)});
+    }
+  })();
+  var N = pts.length;
+  for(var a = 0; a < N; a++) for(var b = a + 1; b < N; b++){
+    var dx = pts[a].x - pts[b].x, dy = pts[a].y - pts[b].y, dz = pts[a].z - pts[b].z;
+    if(dx * dx + dy * dy + dz * dz < 0.0058) links.push([a, b]);
+  }
+  function resize(){
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    var w = canvas.clientWidth || 520;
+    canvas.width = w * dpr; canvas.height = w * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function frame(){
+    if(!running) return;
+    var w = canvas.clientWidth, cx = w / 2, cy = w / 2, R = w * 0.42;
+    if(!dragging) rotY += REDUCED ? 0 : velY;
+    var cosY = Math.cos(rotY), sinY = Math.sin(rotY), cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+    var proj = pts.map(function(p){
+      var x = p.x * cosY - p.z * sinY, z = p.x * sinY + p.z * cosY;
+      var y = p.y * cosX - z * sinX; z = p.y * sinX + z * cosX;
+      return {sx: cx + x * R, sy: cy + y * R, z: z};
+    });
+    ctx.clearRect(0, 0, w, w);
+    ctx.lineWidth = 0.6;
+    links.forEach(function(L){
+      var p = proj[L[0]], q = proj[L[1]];
+      if(p.z < -0.15 || q.z < -0.15) return;
+      var al = 0.16 * (1 - Math.abs(p.z)) + 0.03;
+      ctx.strokeStyle = 'rgba(110,160,230,' + al.toFixed(3) + ')';
+      ctx.beginPath(); ctx.moveTo(p.sx, p.sy); ctx.lineTo(q.sx, q.sy); ctx.stroke();
+    });
+    proj.forEach(function(p){
+      var s = (p.z + 1) / 2, r = 0.8 + s * 1.15;
+      ctx.fillStyle = p.z > 0.55 ? 'rgba(212,175,55,.95)' : 'rgba(160,195,245,' + (0.25 + s * 0.65).toFixed(3) + ')';
+      ctx.beginPath(); ctx.arc(p.sx, p.sy, r, 0, 6.2832); ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  function start(){ if(!running){ running = true; requestAnimationFrame(frame); } }
+  function stop(){ running = false; }
+  canvas.addEventListener('pointerdown', function(e){ dragging = true; lastX = e.clientX; lastY = e.clientY; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    rotY += (e.clientX - lastX) * 0.005; rotX += (e.clientY - lastY) * 0.003;
+    rotX = Math.max(-1.1, Math.min(1.1, rotX));
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  ['pointerup','pointercancel'].forEach(function(ev){ canvas.addEventListener(ev, function(){ dragging = false; }); });
+  window.addEventListener('resize', resize);
+  resize();
+  new IntersectionObserver(function(en){ en[0].isIntersecting ? start() : stop(); }).observe(section);
+  document.addEventListener('visibilitychange', function(){ document.hidden ? stop() : (sectionVisible(section) && start()); });
+})();
+
+/* ================= FBM ink-flow (Melancholy) — rebuilt shader ================= */
+(function(){
+  var canvas = document.getElementById('fluid-canvas');
+  var section = document.getElementById('melancholy');
+  var gl = canvas.getContext('webgl', {alpha:true, antialias:false, depth:false, stencil:false});
+  if(!gl) { canvas.style.display = 'none'; return; }
+  var VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var FS = [
+    'precision highp float;',
+    'uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform vec3 uPaper;uniform vec3 uInk;uniform vec3 uGold;',
+    'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+    'float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);',
+    ' return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}',
+    'float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<6;i++){v+=a*noise(p);p=p*2.03+vec2(17.3,9.1);a*=.5;}return v;}',
+    'void main(){',
+    ' vec2 uv=gl_FragCoord.xy/uRes; vec2 q=uv*3.0;',
+    ' vec2 m=(uMouse-uv)*0.6;',
+    ' float t=uTime*0.045;',
+    ' vec2 w=vec2(fbm(q+vec2(t,0.)),fbm(q+vec2(5.2,1.3)-t));',
+    ' vec2 r=vec2(fbm(q+3.5*w+vec2(1.7,9.2)+0.15*t+m.x),fbm(q+3.5*w+vec2(8.3,2.8)-0.12*t+m.y));',
+    ' float f=fbm(q+3.5*r);',
+    ' vec3 col=mix(uPaper,uInk,clamp(f*f*2.6,0.,1.));',
+    ' float vein=smoothstep(0.46,0.5,abs(r.x))*smoothstep(0.56,0.5,abs(r.x));',
+    ' col=mix(col,uGold,vein*0.5*clamp(f*1.6,0.,1.));',
+    ' float alpha=clamp(f*1.15,0.,1.);',
+    ' gl_FragColor=vec4(col,alpha);',
+    '}'
+  ].join('\n');
+  function sh(type, src){ var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+  var prog = gl.createProgram();
+  gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
+  gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+  gl.linkProgram(prog);
+  if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){ canvas.style.display = 'none'; return; }
+  gl.useProgram(prog);
+  var buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  var loc = gl.getAttribLocation(prog, 'p');
+  gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  var uRes = gl.getUniformLocation(prog, 'uRes'), uTime = gl.getUniformLocation(prog, 'uTime'),
+      uMouse = gl.getUniformLocation(prog, 'uMouse'), uPaper = gl.getUniformLocation(prog, 'uPaper'),
+      uInk = gl.getUniformLocation(prog, 'uInk'), uGold = gl.getUniformLocation(prog, 'uGold');
+  var mouse = {x:.5, y:.5}, sm = {x:.5, y:.5}, running = false, t0 = performance.now();
+  function resize(){
+    var r = section.getBoundingClientRect();
+    canvas.width = Math.floor(r.width * 0.5); canvas.height = Math.floor(r.height * 0.5);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  function colors(){
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if(dark){ gl.uniform3f(uPaper, .05,.05,.05); gl.uniform3f(uInk, .93,.92,.90); }
+    else{ gl.uniform3f(uPaper, .97,.96,.94); gl.uniform3f(uInk, .05,.05,.05); }
+    gl.uniform3f(uGold, .83,.69,.22);
+  }
+  function frame(){
+    if(!running) return;
+    sm.x += (mouse.x - sm.x) * 0.03; sm.y += (mouse.y - sm.y) * 0.03;
+    colors();
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform1f(uTime, (performance.now() - t0) / 1000 * (REDUCED ? 0.25 : 1));
+    gl.uniform2f(uMouse, sm.x, sm.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(frame);
+  }
+  function start(){ if(!running){ running = true; requestAnimationFrame(frame); } }
+  function stop(){ running = false; }
+  section.addEventListener('mousemove', function(e){
+    var r = section.getBoundingClientRect();
+    mouse.x = (e.clientX - r.left) / r.width; mouse.y = 1 - (e.clientY - r.top) / r.height;
+  }, {passive:true});
+  window.addEventListener('resize', resize);
+  window.addEventListener('themeChanged', function(){ if(running){} });
+  resize();
+  new IntersectionObserver(function(en){ en[0].isIntersecting ? start() : stop(); }).observe(section);
+  document.addEventListener('visibilitychange', function(){ document.hidden ? stop() : (sectionVisible(section) && start()); });
+})();
+</script>
+
+<script>
+/* ================= Multicolor fluid ink (Hero) — WebGL stable-fluid, rebuilt =================
+   V2: explicit attribute binding, framebuffer completeness check with byte fallback,
+   GPU resource disposal on resize, context loss/restore handling, timed ink composition. */
+(function(){
+  var canvas = document.getElementById('ink-canvas');
+  var section = document.getElementById('home');
+  var MOBILE = Math.min(window.innerWidth, window.innerHeight) < 768;
+  var CFG = {
+    SIM_RES: MOBILE ? 96 : 144,
+    DYE_RES: MOBILE ? 512 : 1024,
+    PRESSURE_ITER: MOBILE ? 16 : 22,
+    CURL: 24,
+    VEL_DISSIPATION: 0.2,
+    DYE_DISSIPATION: 0.55,
+    SPLAT_RADIUS: 0.22,
+    SPLAT_FORCE: 5200
+  };
+  var PALETTE = [
+    [0.61, 0.14, 0.21], [0.17, 0.30, 0.61], [0.18, 0.55, 0.45], [0.79, 0.64, 0.15], [0.42, 0.29, 0.69]
+  ];
+  var inkMode = 'auto', inkIndex = 0, autoHue = 0;
+  var gl = null, ext = null, blit = null, progFailed = false;
+  var splatProg, advectProg, divProg, curlProg, vortProg, clearProg, pressureProg, gradProg, displayProg;
+  var dye, velocity, divergence, curl, pressure;
+  var running = false, settleFrames = 0, lastTime = performance.now();
+  var flourishQueue = [], flourishStart = 0;
+
+  function getContext(){
+    var params = {alpha:false, depth:false, stencil:false, antialias:false, preserveDrawingBuffer:false};
+    var g2 = canvas.getContext('webgl2', params);
+    if(g2){
+      var f = g2.getExtension('EXT_color_buffer_float') || g2.getExtension('EXT_color_buffer_half_float');
+      var lin = g2.getExtension('OES_texture_half_float_linear');
+      if(f) return {gl:g2, halfFloat:g2.HALF_FLOAT, internalFormat:g2.RGBA16F, linear:!!lin};
+    }
+    var g1 = canvas.getContext('webgl', params) || canvas.getContext('experimental-webgl', params);
+    if(!g1) return null;
+    var hf = g1.getExtension('OES_texture_half_float');
+    var lin1 = g1.getExtension('OES_texture_half_float_linear');
+    if(hf) return {gl:g1, halfFloat:hf.HALF_FLOAT_OES, internalFormat:g1.RGBA, linear:!!lin1};
+    return {gl:g1, halfFloat:null, internalFormat:g1.RGBA, linear:true};
+  }
+  var ctxInfo = getContext();
+  if(!ctxInfo){ startFallback(); return; }
+  gl = ctxInfo.gl; ext = ctxInfo;
+
+  function compile(type, src, keywords){
+    var s = gl.createShader(type);
+    if(keywords) src = keywords.map(function(k){ return '#define ' + k + '\n'; }).join('') + src;
+    gl.shaderSource(s, src); gl.compileShader(s);
+    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(s)); progFailed = true; }
+    return s;
+  }
+  var VS = 'precision highp float;attribute vec2 aPos;varying vec2 vUv;varying vec2 vL;varying vec2 vR;varying vec2 vT;varying vec2 vB;uniform vec2 texelSize;' +
+    'void main(){vUv=aPos*0.5+0.5;vL=vUv-vec2(texelSize.x,0.);vR=vUv+vec2(texelSize.x,0.);vT=vUv+vec2(0.,texelSize.y);vB=vUv-vec2(0.,texelSize.y);gl_Position=vec4(aPos,0.,1.);}';
+  function program(fsSrc, keywords){
+    var p = gl.createProgram();
+    gl.attachShader(p, compile(gl.VERTEX_SHADER, VS));
+    gl.attachShader(p, compile(gl.FRAGMENT_SHADER, fsSrc, keywords));
+    gl.bindAttribLocation(p, 0, 'aPos'); /* explicit binding, no driver guesswork */
+    gl.linkProgram(p);
+    if(!gl.getProgramParameter(p, gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(p)); progFailed = true; }
+    var uniforms = {};
+    var n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+    for(var i = 0; i < n; i++){ var name = gl.getActiveUniform(p, i).name; uniforms[name] = gl.getUniformLocation(p, name); }
+    return {prog:p, uniforms:uniforms, bind:function(){ gl.useProgram(p); }};
+  }
+  function createPrograms(){
+    progFailed = false;
+    splatProg = program('precision highp float;precision highp sampler2D;varying vec2 vUv;uniform sampler2D uTarget;uniform float aspectRatio;uniform vec3 color;uniform vec2 point;uniform float radius;' +
+      'void main(){vec2 p=vUv-point;p.x*=aspectRatio;vec3 base=texture2D(uTarget,vUv).xyz;vec3 splat=exp(-dot(p,p)/radius)*color;gl_FragColor=vec4(base+splat,1.);}');
+    advectProg = program('precision highp float;precision highp sampler2D;varying vec2 vUv;uniform sampler2D uVelocity;uniform sampler2D uSource;uniform vec2 texelSize;uniform vec2 dyeTexelSize;uniform float dt;uniform float dissipation;' +
+      'vec4 bilerp(sampler2D sam,vec2 uv,vec2 tsize){vec2 st=uv/tsize-0.5;vec2 iuv=floor(st);vec2 fuv=fract(st);vec4 a=texture2D(sam,(iuv+vec2(0.5,0.5))*tsize);vec4 b=texture2D(sam,(iuv+vec2(1.5,0.5))*tsize);vec4 c=texture2D(sam,(iuv+vec2(0.5,1.5))*tsize);vec4 d=texture2D(sam,(iuv+vec2(1.5,1.5))*tsize);return mix(mix(a,b,fuv.x),mix(c,d,fuv.x),fuv.y);}' +
+      'void main(){\n' +
+      '#ifdef MANUAL_FILTERING\n vec2 coord=vUv-dt*bilerp(uVelocity,vUv,texelSize).xy*texelSize; vec4 result=bilerp(uSource,coord,dyeTexelSize);\n#else\n vec2 coord=vUv-dt*texture2D(uVelocity,vUv).xy*texelSize; vec4 result=texture2D(uSource,coord);\n#endif\n' +
+      ' float decay=1.0+dissipation*dt; gl_FragColor=result/decay; gl_FragColor.a=1.0;}',
+      ext.linear ? null : ['MANUAL_FILTERING']);
+    divProg = program('precision mediump float;precision mediump sampler2D;varying highp vec2 vUv;varying highp vec2 vL;varying highp vec2 vR;varying highp vec2 vT;varying highp vec2 vB;uniform sampler2D uVelocity;' +
+      'void main(){float L=texture2D(uVelocity,vL).x;float R=texture2D(uVelocity,vR).x;float T=texture2D(uVelocity,vT).y;float B=texture2D(uVelocity,vB).y;vec2 C=texture2D(uVelocity,vUv).xy;' +
+      ' if(vL.x<0.0){L=-C.x;} if(vR.x>1.0){R=-C.x;} if(vT.y>1.0){T=-C.y;} if(vB.y<0.0){B=-C.y;}' +
+      ' float div=0.5*(R-L+T-B); gl_FragColor=vec4(div,0.,0.,1.);}');
+    curlProg = program('precision mediump float;precision mediump sampler2D;varying highp vec2 vUv;varying highp vec2 vL;varying highp vec2 vR;varying highp vec2 vT;varying highp vec2 vB;uniform sampler2D uVelocity;' +
+      'void main(){float L=texture2D(uVelocity,vL).y;float R=texture2D(uVelocity,vR).y;float T=texture2D(uVelocity,vT).x;float B=texture2D(uVelocity,vB).x;' +
+      ' float vorticity=R-L-T+B; gl_FragColor=vec4(0.5*vorticity,0.,0.,1.);}');
+    vortProg = program('precision highp float;precision highp sampler2D;varying vec2 vUv;varying vec2 vL;varying vec2 vR;varying vec2 vT;varying vec2 vB;uniform sampler2D uVelocity;uniform sampler2D uCurl;uniform float curl;uniform float dt;' +
+      'void main(){float L=texture2D(uCurl,vL).x;float R=texture2D(uCurl,vR).x;float T=texture2D(uCurl,vT).x;float B=texture2D(uCurl,vB).x;float C=texture2D(uCurl,vUv).x;' +
+      ' vec2 force=0.5*vec2(abs(T)-abs(B),abs(R)-abs(L)); float len=max(length(force),0.0001); force/=len; force*=curl*C; force.y*=-1.0;' +
+      ' vec2 vel=texture2D(uVelocity,vUv).xy; vel+=force*dt; vel=clamp(vel,-1000.,1000.); gl_FragColor=vec4(vel,0.,1.);}');
+    clearProg = program('precision mediump float;precision mediump sampler2D;varying highp vec2 vUv;uniform sampler2D uTexture;uniform float value;' +
+      'void main(){gl_FragColor=value*texture2D(uTexture,vUv);}');
+    pressureProg = program('precision mediump float;precision mediump sampler2D;varying highp vec2 vUv;varying highp vec2 vL;varying highp vec2 vR;varying highp vec2 vT;varying highp vec2 vB;uniform sampler2D uPressure;uniform sampler2D uDivergence;' +
+      'void main(){float L=texture2D(uPressure,vL).x;float R=texture2D(uPressure,vR).x;float T=texture2D(uPressure,vT).x;float B=texture2D(uPressure,vB).x;float div=texture2D(uDivergence,vUv).x;' +
+      ' float pressure=(L+R+B+T-div)*0.25; gl_FragColor=vec4(pressure,0.,0.,1.);}');
+    gradProg = program('precision mediump float;precision mediump sampler2D;varying highp vec2 vUv;varying highp vec2 vL;varying highp vec2 vR;varying highp vec2 vT;varying highp vec2 vB;uniform sampler2D uPressure;uniform sampler2D uVelocity;' +
+      'void main(){float L=texture2D(uPressure,vL).x;float R=texture2D(uPressure,vR).x;float T=texture2D(uPressure,vT).x;float B=texture2D(uPressure,vB).x;' +
+      ' vec2 vel=texture2D(uVelocity,vUv).xy; vel-=vec2(R-L,T-B); gl_FragColor=vec4(vel,0.,1.);}');
+    displayProg = program('precision highp float;precision highp sampler2D;varying vec2 vUv;uniform sampler2D uTexture;uniform vec3 uBg;uniform float uDark;' +
+      'void main(){vec3 dye=texture2D(uTexture,vUv).rgb;' +
+      ' float d=clamp((dye.r+dye.g+dye.b)*1.35,0.,1.);' +
+      ' vec3 hue=dye/max(d,0.001); hue=clamp(hue,0.,1.);' +
+      ' float cover=smoothstep(0.02,0.9,d);' +
+      ' vec3 col=mix(uBg,hue,cover);' +
+      ' col+=hue*d*uDark*0.35;' +
+      ' gl_FragColor=vec4(col,1.);}');
+  }
+  function createBlit(){
+    var buf = gl.createBuffer(), idx = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, -1,1, 1,1, 1,-1]), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idx);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0,1,2, 0,2,3]), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(0);
+    return function(target){
+      if(target == null){ gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight); gl.bindFramebuffer(gl.FRAMEBUFFER, null); }
+      else { gl.viewport(0, 0, target.width, target.height); gl.bindFramebuffer(gl.FRAMEBUFFER, target.fbo); }
+      gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+    };
+  }
+  function createFBO(w, h, internalFormat, type, filter){
+    gl.activeTexture(gl.TEXTURE0);
+    var tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, w, h, 0, gl.RGBA, type, null);
+    var fbo = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+    var complete = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+    gl.viewport(0, 0, w, h); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+    return {texture:tex, fbo:fbo, width:w, height:h, complete:complete,
+      texelSizeX:1/w, texelSizeY:1/h,
+      attach:function(id){ gl.activeTexture(gl.TEXTURE0 + id); gl.bindTexture(gl.TEXTURE_2D, tex); return id; },
+      dispose:function(){ gl.deleteTexture(tex); gl.deleteFramebuffer(fbo); }};
+  }
+  function createDoubleFBO(w, h, f, t, filter){
+    var fbo1 = createFBO(w, h, f, t, filter), fbo2 = createFBO(w, h, f, t, filter);
+    return {width:w, height:h, texelSizeX:fbo1.texelSizeX, texelSizeY:fbo1.texelSizeY,
+      get read(){ return fbo1; }, set read(v){ fbo1 = v; },
+      get write(){ return fbo2; }, set write(v){ fbo2 = v; },
+      swap:function(){ var t2 = fbo1; fbo1 = fbo2; fbo2 = t2; },
+      complete:function(){ return fbo1.complete && fbo2.complete; },
+      dispose:function(){ fbo1.dispose(); fbo2.dispose(); }};
+  }
+  function getRes(resolution){
+    var aspect = gl.drawingBufferWidth / gl.drawingBufferHeight;
+    if(aspect < 1) aspect = 1 / aspect;
+    var min = Math.round(resolution), max = Math.round(resolution * aspect);
+    return gl.drawingBufferWidth > gl.drawingBufferHeight ? {width:max, height:min} : {width:min, height:max};
+  }
+  function disposeAll(){
+    [dye, velocity, pressure].forEach(function(f){ if(f && f.dispose) f.dispose(); });
+    [divergence, curl].forEach(function(f){ if(f && f.dispose) f.dispose(); });
+    dye = velocity = divergence = curl = pressure = null;
+  }
+  function initFBOs(){
+    disposeAll();
+    var sim = getRes(CFG.SIM_RES), dyeR = getRes(CFG.DYE_RES);
+    var filtering = ext.linear ? gl.LINEAR : gl.NEAREST;
+    gl.disable(gl.BLEND);
+    function build(type, format){
+      dye = createDoubleFBO(dyeR.width, dyeR.height, format, type, filtering);
+      velocity = createDoubleFBO(sim.width, sim.height, format, type, filtering);
+      divergence = createFBO(sim.width, sim.height, format, type, gl.NEAREST);
+      curl = createFBO(sim.width, sim.height, format, type, gl.NEAREST);
+      pressure = createDoubleFBO(sim.width, sim.height, format, type, gl.NEAREST);
+      return dye.complete() && velocity.complete() && pressure.complete() && divergence.complete && curl.complete;
+    }
+    var ok = build(ext.halfFloat || gl.UNSIGNED_BYTE, ext.internalFormat);
+    if(!ok && ext.halfFloat){ /* half-float not renderable here: step down to byte textures */
+      disposeAll();
+      build(gl.UNSIGNED_BYTE, gl.RGBA);
+    }
+  }
+  function resizeCanvas(){
+    var dpr = Math.min(1.5, window.devicePixelRatio || 1);
+    var w = Math.floor(section.clientWidth * dpr), h = Math.floor(section.clientHeight * dpr);
+    if(canvas.width !== w || canvas.height !== h){ canvas.width = w; canvas.height = h; initFBOs(); flourish(); }
+  }
+  function correctRadius(radius){
+    var aspect = canvas.width / canvas.height;
+    return aspect > 1 ? radius * aspect : radius;
+  }
+  function pickColor(){
+    if(inkMode === 'auto'){
+      autoHue += 0.13;
+      var i = Math.floor(autoHue) % PALETTE.length, j = (i + 1) % PALETTE.length, f = autoHue - Math.floor(autoHue);
+      var a = PALETTE[i], b = PALETTE[j];
+      return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f];
+    }
+    return PALETTE[inkIndex];
+  }
+  function splat(x, y, dx, dy, color, strength){
+    if(!dye || !velocity) return;
+    splatProg.bind();
+    gl.uniform1i(splatProg.uniforms.uTarget, velocity.read.attach(0));
+    gl.uniform1f(splatProg.uniforms.aspectRatio, canvas.width / canvas.height);
+    gl.uniform2f(splatProg.uniforms.point, x, y);
+    gl.uniform1f(splatProg.uniforms.radius, correctRadius(CFG.SPLAT_RADIUS / 100));
+    gl.uniform3f(splatProg.uniforms.color, dx, dy, 0);
+    blit(velocity.write); velocity.swap();
+    gl.uniform1i(splatProg.uniforms.uTarget, dye.read.attach(0));
+    gl.uniform3f(splatProg.uniforms.color, color[0] * strength, color[1] * strength, color[2] * strength);
+    blit(dye.write); dye.swap();
+  }
+  function flourish(){
+    if(REDUCED){
+      splat(0.32, 0.55, 900, 120, PALETTE[0], 0.55);
+      splat(0.55, 0.42, 700, -80, PALETTE[1], 0.5);
+      splat(0.72, 0.6, -600, 150, PALETTE[2], 0.45);
+      return;
+    }
+    /* the opening composition forms slowly, stroke by stroke */
+    flourishQueue = [];
+    flourishStart = performance.now();
+    var steps = 14;
+    for(var i = 0; i < steps; i++){
+      (function(i){
+        var t = i / steps;
+        flourishQueue.push({at: 120 + i * 95, fn:function(){
+          splat(0.12 + t * 0.7, 0.62 - Math.sin(t * Math.PI) * 0.22,
+            2600 * (1 - t * 0.4), 500 * Math.cos(t * Math.PI), PALETTE[i % PALETTE.length], 0.34);
+        }});
+      })(i);
+    }
+    flourishQueue.push({at: 120 + steps * 95 + 150, fn:function(){ splat(0.8, 0.3, -1400, 500, PALETTE[3], 0.4); }});
+    flourishQueue.push({at: 120 + steps * 95 + 320, fn:function(){ splat(0.25, 0.28, 1200, 700, PALETTE[4], 0.36); }});
+  }
+  function step(){
+    if(!running) return;
+    var now = performance.now();
+    var dt = Math.min((now - lastTime) / 1000, 0.0166);
+    lastTime = now;
+    while(flourishQueue.length && now - flourishStart >= flourishQueue[0].at){ flourishQueue.shift().fn(); }
+    curlProg.bind();
+    gl.uniform2f(curlProg.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+    gl.uniform1i(curlProg.uniforms.uVelocity, velocity.read.attach(0));
+    blit(curl);
+    vortProg.bind();
+    gl.uniform2f(vortProg.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+    gl.uniform1i(vortProg.uniforms.uVelocity, velocity.read.attach(0));
+    gl.uniform1i(vortProg.uniforms.uCurl, curl.attach(1));
+    gl.uniform1f(vortProg.uniforms.curl, CFG.CURL);
+    gl.uniform1f(vortProg.uniforms.dt, dt);
+    blit(velocity.write); velocity.swap();
+    divProg.bind();
+    gl.uniform2f(divProg.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+    gl.uniform1i(divProg.uniforms.uVelocity, velocity.read.attach(0));
+    blit(divergence);
+    clearProg.bind();
+    gl.uniform1i(clearProg.uniforms.uTexture, pressure.read.attach(0));
+    gl.uniform1f(clearProg.uniforms.value, 0.8);
+    blit(pressure.write); pressure.swap();
+    pressureProg.bind();
+    gl.uniform2f(pressureProg.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+    gl.uniform1i(pressureProg.uniforms.uDivergence, divergence.attach(0));
+    for(var i = 0; i < CFG.PRESSURE_ITER; i++){
+      gl.uniform1i(pressureProg.uniforms.uPressure, pressure.read.attach(1));
+      blit(pressure.write); pressure.swap();
+    }
+    gradProg.bind();
+    gl.uniform2f(gradProg.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+    gl.uniform1i(gradProg.uniforms.uPressure, pressure.read.attach(0));
+    gl.uniform1i(gradProg.uniforms.uVelocity, velocity.read.attach(1));
+    blit(velocity.write); velocity.swap();
+    advectProg.bind();
+    gl.uniform2f(advectProg.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+    var velId = velocity.read.attach(0);
+    gl.uniform1i(advectProg.uniforms.uVelocity, velId);
+    gl.uniform1i(advectProg.uniforms.uSource, velId);
+    gl.uniform2f(advectProg.uniforms.dyeTexelSize, velocity.texelSizeX, velocity.texelSizeY);
+    gl.uniform1f(advectProg.uniforms.dt, dt);
+    gl.uniform1f(advectProg.uniforms.dissipation, CFG.VEL_DISSIPATION);
+    blit(velocity.write); velocity.swap();
+    gl.uniform1i(advectProg.uniforms.uVelocity, velocity.read.attach(0));
+    gl.uniform1i(advectProg.uniforms.uSource, dye.read.attach(1));
+    gl.uniform2f(advectProg.uniforms.dyeTexelSize, dye.texelSizeX, dye.texelSizeY);
+    gl.uniform1f(advectProg.uniforms.dissipation, CFG.DYE_DISSIPATION);
+    blit(dye.write); dye.swap();
+    displayProg.bind();
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if(dark) gl.uniform3f(displayProg.uniforms.uBg, 0.031, 0.031, 0.031);
+    else gl.uniform3f(displayProg.uniforms.uBg, 0.969, 0.961, 0.941);
+    gl.uniform1f(displayProg.uniforms.uDark, dark ? 1 : 0);
+    gl.uniform1i(displayProg.uniforms.uTexture, dye.read.attach(0));
+    blit(null);
+    if(settleFrames > 0){ settleFrames--; if(settleFrames === 0){ running = false; return; } }
+    requestAnimationFrame(step);
+  }
+  function start(){ if(!running && dye){ running = true; lastTime = performance.now(); requestAnimationFrame(step); } }
+  function stop(){ running = false; }
+
+  var prev = null;
+  function toUV(e){
+    var r = canvas.getBoundingClientRect();
+    return {x:(e.clientX - r.left) / r.width, y:1 - (e.clientY - r.top) / r.height};
+  }
+  section.addEventListener('pointermove', function(e){
+    var p = toUV(e);
+    if(prev){
+      var dx = (p.x - prev.x) * CFG.SPLAT_FORCE, dy = (p.y - prev.y) * CFG.SPLAT_FORCE;
+      if(dx || dy) splat(p.x, p.y, dx, dy, pickColor(), 0.2);
+    }
+    prev = p;
+  }, {passive:true});
+  section.addEventListener('pointerdown', function(e){
+    var p = toUV(e);
+    var c = pickColor();
+    for(var i = 0; i < 5; i++){
+      splat(p.x + (Math.random() - 0.5) * 0.03, p.y + (Math.random() - 0.5) * 0.03,
+        (Math.random() - 0.5) * 2600, (Math.random() - 0.5) * 2600, c, 0.3);
+    }
+  }, {passive:true});
+  section.addEventListener('pointerleave', function(){ prev = null; });
+
+  document.querySelectorAll('.ink-dot').forEach(function(d){
+    d.addEventListener('click', function(){
+      document.querySelectorAll('.ink-dot').forEach(function(x){ x.classList.remove('on'); });
+      d.classList.add('on');
+      var v = d.getAttribute('data-ink');
+      if(v === 'auto') inkMode = 'auto'; else { inkMode = 'fixed'; inkIndex = +v; }
+      splat(0.5, 0.5, 1800, 600, pickColor(), 0.4);
+    });
+  });
+  document.getElementById('ink-clear').addEventListener('click', function(){
+    if(!dye) return;
+    [dye, velocity].forEach(function(f){
+      gl.bindFramebuffer(gl.FRAMEBUFFER, f.read.fbo); gl.clearColor(0,0,0,1); gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, f.write.fbo); gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    });
+  });
+
+  var inkAlive = true;
+  function initInk(){
+    blit = createBlit();
+    createPrograms();
+    if(progFailed){ inkAlive = false; startFallback(); return; }
+    inkAlive = true;
+    resizeCanvas();
+    if(REDUCED){ settleFrames = 45; start(); }
+    else if(sectionVisible(section) && !document.hidden) start();
+  }
+  canvas.addEventListener('webglcontextlost', function(e){ e.preventDefault(); stop(); inkAlive = false; startFallback(); });
+  canvas.addEventListener('webglcontextrestored', function(){ stopFallback(); initInk(); });
+  window.addEventListener('resize', function(){ if(inkAlive) resizeCanvas(); });
+  initInk();
+  if(!REDUCED){
+    new IntersectionObserver(function(en){ en[0].isIntersecting ? (inkAlive && start()) : stop(); }).observe(section);
+    document.addEventListener('visibilitychange', function(){ document.hidden ? stop() : (inkAlive && sectionVisible(section) && start()); });
+  }
+
+  /* Canvas2D fallback: drifting pigment that trails the pointer; same lifecycle rules */
+  var fbState = null;
+  function startFallback(){
+    if(fbState) { fbState.el.style.display = 'block'; fbState.start(); return; }
+    canvas.style.display = 'none';
+    var fb = document.getElementById('ink-fallback');
+    fb.style.display = 'block';
+    var c2 = fb.getContext('2d'), blobs = [], running2 = false;
+    var cols = ['155,35,53', '43,76,155', '46,139,116', '201,162,39', '108,74,176'];
+    function rs(){ fb.width = section.clientWidth; fb.height = section.clientHeight; }
+    rs(); window.addEventListener('resize', rs);
+    section.addEventListener('pointermove', function(e){
+      var r = fb.getBoundingClientRect();
+      blobs.push({x:e.clientX - r.left, y:e.clientY - r.top, r:8 + Math.random() * 22, c:cols[Math.floor(Math.random() * cols.length)], a:0.16});
+      if(blobs.length > 90) blobs.shift();
+    }, {passive:true});
+    function loop(){
+      if(!running2) return;
+      var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      c2.fillStyle = dark ? 'rgba(8,8,8,0.06)' : 'rgba(247,245,240,0.06)';
+      c2.fillRect(0, 0, fb.width, fb.height);
+      blobs.forEach(function(b){
+        var g = c2.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+        g.addColorStop(0, 'rgba(' + b.c + ',' + b.a + ')');
+        g.addColorStop(1, 'rgba(' + b.c + ',0)');
+        c2.fillStyle = g;
+        c2.beginPath(); c2.arc(b.x, b.y, b.r, 0, 6.2832); c2.fill();
+        b.r += 0.7; b.a *= 0.985;
+      });
+      blobs = blobs.filter(function(b){ return b.a > 0.01; });
+      requestAnimationFrame(loop);
+    }
+    fbState = { el: fb,
+      start: function(){ if(!running2){ running2 = true; requestAnimationFrame(loop); } },
+      stop: function(){ running2 = false; } };
+    new IntersectionObserver(function(en){ en[0].isIntersecting ? fbState.start() : fbState.stop(); }).observe(section);
+    document.addEventListener('visibilitychange', function(){ document.hidden ? fbState.stop() : (sectionVisible(section) && fbState.start()); });
+    fbState.start();
+  }
+  function stopFallback(){
+    var fb = document.getElementById('ink-fallback');
+    if(fb) fb.style.display = 'none';
+    if(fbState) fbState.stop();
+    canvas.style.display = 'block';
+  }
+})();
+</script>
 </body>
 </html>
